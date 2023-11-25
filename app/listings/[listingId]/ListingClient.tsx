@@ -30,7 +30,7 @@ interface ListingClientProps {
   currentUser?: SafeUser | null;
 }
 
-const Listingclient: React.FC<ListingClientProps> = ({
+const ListingClient: React.FC<ListingClientProps> = ({
   listing,
   reservations = [],
   currentUser
@@ -169,4 +169,4 @@ const Listingclient: React.FC<ListingClientProps> = ({
    );
 }
  
-export default Listingclient;
+export default ListingClient;
