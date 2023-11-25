@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: 'Airbnb Clone',
 }
 
+export const dynamic = 'force-dynamic'
+
 const font  = Nunito({
   subsets:['latin']
 })
