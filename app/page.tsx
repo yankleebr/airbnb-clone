@@ -1,62 +1,39 @@
-import getCurrentUser from "./actions/getCurrentUser"
-import getListings, { IListingsParams } from "./actions/getListings"
+import getCurrentUser from "@/app/actions/getCurrentUser";
+import getListingById from "@/app/actions/getListingById";
+import getReservations from "@/app/actions/getReservations";
 
-import ClientOnly from "./components/ClientOnly"
-import Container from "./components/Container"
-import EmptyState from "./components/EmptyState"
-import ListingCard from "./components/listings/ListingCard"
+import ClientOnly from "@/app/components/ClientOnly";
+import EmptyState from "@/app/components/EmptyState";
 
-interface HomeProps{
-  searchParams:IListingsParams
+import ListingClient from "./ListingClient";
+
+interface IParams {
+  listingId?: string;
 }
 
-const Home = async ({searchParams}:HomeProps) =>{
-  const listings = await getListings(searchParams)
-  const currentUser = await getCurrentUser()
-  
+const ListingPage = async ({ params }: { params: IParams }) => {
 
-  if(listings.length === 0){
-    return(
-      <ClientOnly>
-        <EmptyState
-          showReset
-        />
-      </ClientOnly>
-    )
-  }
-  
-  
+  const listing = await getListingById(params);
+  const reservations = await getReservations(params);
+  const currentUser = await getCurrentUser();
+
+  if (!listing) {
     return (
       <ClientOnly>
-        <Container>
-          <div 
-            className="
-              pt-24
-              grid 
-              grid-cols-1 
-              sm:grid-cols-2 
-              md:grid-cols-3 
-              lg:grid-cols-4
-              xl:grid-cols-5
-              2xl:grid-cols-6
-              gap-8
-            "
-          >
-            {listings.map((listing) =>{
-              return(
-                <ListingCard
-                currentUser={currentUser}
-                key={listing.id}
-                data={listing}
-                />
-
-              )
-            })}
-          </div>
-        </Container>
+        <EmptyState />
       </ClientOnly>
-    )
-  
-}
+    );
+  }
 
-export default Home
+  return (
+    <ClientOnly>
+      <ListingClient
+        listing={listing}
+        reservations={reservations}
+        currentUser={currentUser}
+      />
+    </ClientOnly>
+  );
+}
+ 
+export default ListingPage;
